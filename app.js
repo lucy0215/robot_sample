@@ -17,8 +17,8 @@ const
   express = require('express'),
   https = require('https'),  
   request = require('request');
-
-/*// Retrieve            ******************************************************************mongodb
+  
+/*// Retrieve
 var MongoClient = require('mongodb').MongoClient;
 
 // Connect to the db
@@ -26,13 +26,15 @@ MongoClient.connect("mongodb://218.164.15.139:27017/db", function(err, db) {
   if(!err) {
     console.log("We are connected mongodb");
   }
-});
-require('./lib/db_mongo');  ************************************************************************/          
-var mongoose = require('mongoose');
+});*/
+
+
+//require('./lib/db_mongo'); **********************************************            
+var mongoose = require('mongoose');       
 var brain=require("brain");
 //var training_data_model = mongoose.model('training_data');
 //var target_data_model = mongoose.model('target_data');
-//var device_list_model = mongoose.model('devices');
+//var device_list_model = mongoose.model('devices');  ***********************
 //You can set the number and size of your hidden layers,
 var net =new brain.NeuralNetwork(
     {
@@ -45,7 +47,7 @@ var net =new brain.NeuralNetwork(
       //   global learning rate, useful when training using streams
       learningRate: 0.78
     }
-  );
+  ); 
 
 
 var app = express();
@@ -90,7 +92,7 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
 /*
  * Use your own validation token. Check that the token used in the Webhook 
  * setup is the same token used here.
- 
+ *
  */
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
@@ -265,12 +267,13 @@ function receivedMessage(event) {
   var messageText = message.text;
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
-    if (messageText=="how are you"){
+   /* if (messageText=="how are you"){
       sendTextMessage(senderID, "I'm fine.");
       return;
     }
-  sendTextMessage(senderID, getAnswer(messageText,event));
-  return;
+  //sendTextMessage(senderID,messageText);   //回傳使用者所打的文字
+  sendTextMessage(senderID, getAnswer(messageText,event));  //進入到answer function
+  return;*/
   if (isEcho) {
     // Just logging message echoes to console
     
@@ -294,7 +297,7 @@ function receivedMessage(event) {
     // the text we received.
     switch (messageText) {
       case 'image':
-        //sendImageMessage(senderID);
+        sendImageMessage(senderID);
         break;
 
       case 'gif':
@@ -336,7 +339,7 @@ function receivedMessage(event) {
       case 'typing on':
         sendTypingOn(senderID);
         break;        
-		    
+
       case 'typing off':
         sendTypingOff(senderID);
         break;        
@@ -403,6 +406,7 @@ function receivedPostback(event) {
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
 }
+
 /*
  * Message Read Event
  *
@@ -454,7 +458,8 @@ function sendImageMessage(recipientId) {
       attachment: {
         type: "image",
         payload: {
-          url: SERVER_URL + "/assets/rift.png"
+          //url: SERVER_URL + "/assets/rift.png"
+		  url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9LX0tn8C_PW1cXBep05JSmrwXpAfCNjByCfEDiHKbwIufubP5Qg"
         }
       }
     }
@@ -971,11 +976,7 @@ function getAnswer(send_text,event){
 		  reply_msg="your condition is "+JSON.stringify(question)+"\n";
 		  reply_msg+=getNNResult(question);
 	    break;
-
-	  case "hello! Mr.Wang, I want to know my grade will be good or not?":
-	    reply_msg='OK! I will ask you some questions, for understand your situation\n';
-	    reply_msg+='It will be good for help me to predict your grade...';
-	    break;
+ 
 	 
 	  case "OK":
 	    reply_msg='how long have you study?\n';
