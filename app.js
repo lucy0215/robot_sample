@@ -32,7 +32,7 @@ var mongoose = require('mongoose');
 var brain=require("brain");
 //var training_data_model = mongoose.model('training_data');
 //var target_data_model = mongoose.model('target_data');
-var device_list_model = mongoose.model('devices');
+//var device_list_model = mongoose.model('devices');
 //You can set the number and size of your hidden layers,
 var net =new brain.NeuralNetwork(
     {
